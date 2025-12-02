@@ -142,7 +142,22 @@ iframe {
 }
 
 /* MOBILE, Max width = 700-760? (look it up) */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
+.iframe-popup {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  background: PINK;
+  border: 1px solid #000000;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  z-index: 1000;
+ width: 100%;
+ height: 100%;
+  border-radius: 10px;
+  overflow-y: auto;
+
+  
+}
+
   iframe {
     width: 100%;
     border: none;
