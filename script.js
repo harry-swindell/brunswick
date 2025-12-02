@@ -91,6 +91,8 @@ function openIframe(year, month, day) {
   closeBtn.textContent = '✖';
   closeBtn.onclick = () => popup.remove();
 
+  //closeBtn.style.position = "sticky";
+
   headerDiv.appendChild(closeBtn);
   popup.appendChild(headerDiv);
 
@@ -98,11 +100,11 @@ function openIframe(year, month, day) {
   makeDraggable(popup, headerDiv);
   currentIframe = popup;
 
-  // MULTIPLE IMAGE SUPPORT
+  /* ---- MULTIPLE IMAGE SUPPORT ---- */
+
   const letters = "abcdefghijklmnopqrstuvwxyz".split("");
   const images = [];
 
-  // RENDER IMAGES OR MESSAGE
   function renderImages() {
     while (popup.children.length > 1) {
       popup.removeChild(popup.lastChild);
@@ -121,35 +123,25 @@ function openIframe(year, month, day) {
     images.forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.style.width = "100%";
-      img.style.display = "block";
-      img.style.marginBottom = "1em";
       popup.appendChild(img);
     });
   }
 
-  // Probe dayX.jpg (original format)
+  // Try base image
   const basePath = `assets/${year}/${month + 1}/day${day}.jpg`;
   const baseProbe = new Image();
-  baseProbe.onload = () => {
-    images.push(basePath);
-    renderImages();
-  };
+  baseProbe.onload = () => { images.push(basePath); renderImages(); };
   baseProbe.src = basePath;
 
-  // Probe dayXa / dayXb / dayXc etc.
+  // Try dayX(a, b, c...)
   letters.forEach(letter => {
     const path = `assets/${year}/${month + 1}/day${day}${letter}.jpg`;
     const probe = new Image();
-
-    probe.onload = () => {
-      images.push(path);
-      renderImages();
-    };
-
+    probe.onload = () => { images.push(path); renderImages(); };
     probe.src = path;
   });
 }
+
 
 // --- DRAGGABLE POPUP ---
 function makeDraggable(element, handle) {
