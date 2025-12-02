@@ -45,7 +45,7 @@ function renderCalendar(year, month) {
     day.classList.add('day');
     day.textContent = d;
 
-    // Default: past/today/future logic 
+    // Default: past/today/future coloring
     if (isCurrentMonth) {
       if (d < today.getDate()) day.classList.add('past');
       else if (d === today.getDate()) day.classList.add('today');
@@ -54,24 +54,26 @@ function renderCalendar(year, month) {
       day.classList.add('future');
     }
 
-    // --------- CHECK IF IMAGE EXISTS ---------
-    const imgPath = `assets/${year}/${month + 1}/day${d}.jpg`;
-    const testImg = new Image();
+    // ---------- HIGHLIGHT ONLY IF LETTER-SUFFIX IMAGES EXIST ----------
+    const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+    let marked = false;
 
-    testImg.onload = () => {
-      day.classList.add('has-image');
-    };
-
-    testImg.onerror = () => {};
-
-    testImg.src = imgPath;
-    // -----------------------------------------
+    letters.forEach(letter => {
+      const img = new Image();
+      img.onload = () => {
+        if (!marked) {
+          marked = true;
+          day.classList.add("has-image");
+        }
+      };
+      img.src = `assets/${year}/${month + 1}/day${d}${letter}.jpg`;
+    });
+    // -----------------------------------------------------------------
 
     day.addEventListener('click', () => openIframe(year, month, d));
 
     calendar.appendChild(day);
   }
-
 }
 
 // --- IFRAME POPUP / MULTI-IMAGE POPUP ---
@@ -90,8 +92,6 @@ function openIframe(year, month, day) {
   const closeBtn = document.createElement('button');
   closeBtn.textContent = '✖';
   closeBtn.onclick = () => popup.remove();
-
-  //closeBtn.style.position = "sticky";
 
   headerDiv.appendChild(closeBtn);
   popup.appendChild(headerDiv);
@@ -127,13 +127,13 @@ function openIframe(year, month, day) {
     });
   }
 
-  // Try base image
+  // Always check base image
   const basePath = `assets/${year}/${month + 1}/day${day}.jpg`;
   const baseProbe = new Image();
   baseProbe.onload = () => { images.push(basePath); renderImages(); };
   baseProbe.src = basePath;
 
-  // Try dayX(a, b, c...)
+  // Check lettered images (dayXa, dayXb …)
   letters.forEach(letter => {
     const path = `assets/${year}/${month + 1}/day${day}${letter}.jpg`;
     const probe = new Image();
