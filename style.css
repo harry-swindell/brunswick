@@ -12,7 +12,7 @@ body {
 
 
 .calendar-container {
-  max-width: 60%;
+  max-width: 800px;
   width: 100%;
 }
 
@@ -40,7 +40,7 @@ body {
 .day {
   background: #eee;
   border-radius: 8px;
-  padding: 3rem;
+  padding: 1rem;
   text-align: center;
   cursor: pointer;
   user-select: none;
