@@ -62,7 +62,6 @@ function renderCalendar(year, month) {
       day.classList.add('has-image');
     };
 
-    // If it fails, nothing happens
     testImg.onerror = () => {};
 
     testImg.src = imgPath;
@@ -75,7 +74,7 @@ function renderCalendar(year, month) {
 
 }
 
-// --- IFRAME POPUP FUNCTION ---
+// --- IFRAME POPUP / MULTI-IMAGE POPUP ---
 let currentIframe = null;
 
 function openIframe(year, month, day) {
@@ -89,28 +88,67 @@ function openIframe(year, month, day) {
   headerDiv.innerHTML = `<span>Events for ${month + 1}/${day}/${year}</span>`;
 
   const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'X';
+  closeBtn.textContent = '✖';
   closeBtn.onclick = () => popup.remove();
 
   headerDiv.appendChild(closeBtn);
   popup.appendChild(headerDiv);
 
-  const iframe = document.createElement('iframe');
-  const imagePath = `assets/${year}/${month + 1}/day${day}.jpg`;
-
-  iframe.onerror = () => {
-    iframe.srcdoc = `
-      <div style="font-family:sans-serif; text-align:center; margin-top:2em;">
-        <p>No events posted for this day.</p>
-      </div>`;
-  };
-
-  iframe.src = imagePath;
-  popup.appendChild(iframe);
   document.body.appendChild(popup);
-
   makeDraggable(popup, headerDiv);
   currentIframe = popup;
+
+  // MULTIPLE IMAGE SUPPORT
+  const letters = "abcdefghijklmnopqrstuvwxyz".split("");
+  const images = [];
+
+  // RENDER IMAGES OR MESSAGE
+  function renderImages() {
+    while (popup.children.length > 1) {
+      popup.removeChild(popup.lastChild);
+    }
+
+    if (images.length === 0) {
+      const msg = document.createElement('div');
+      msg.style.padding = "1.5em";
+      msg.style.textAlign = "center";
+      msg.style.fontFamily = "sans-serif";
+      msg.innerHTML = `<p>No events posted.</p>`;
+      popup.appendChild(msg);
+      return;
+    }
+
+    images.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.style.width = "100%";
+      img.style.display = "block";
+      img.style.marginBottom = "1em";
+      popup.appendChild(img);
+    });
+  }
+
+  // Probe dayX.jpg (original format)
+  const basePath = `assets/${year}/${month + 1}/day${day}.jpg`;
+  const baseProbe = new Image();
+  baseProbe.onload = () => {
+    images.push(basePath);
+    renderImages();
+  };
+  baseProbe.src = basePath;
+
+  // Probe dayXa / dayXb / dayXc etc.
+  letters.forEach(letter => {
+    const path = `assets/${year}/${month + 1}/day${day}${letter}.jpg`;
+    const probe = new Image();
+
+    probe.onload = () => {
+      images.push(path);
+      renderImages();
+    };
+
+    probe.src = path;
+  });
 }
 
 // --- DRAGGABLE POPUP ---
