@@ -103,7 +103,7 @@ body {
   width: 20%;
   height: 70%;
   border-radius: 10px;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .iframe-header {
@@ -139,4 +139,12 @@ iframe {
   background: #ef74ff !important;
   color: white;
   font-weight: bold;
+}
+
+/* MOBILE, Max width = 700-760? (look it up) */
+@media (max-width: 768px) {
+  iframe {
+    width: 100%;
+    border: none;
+  }
 }
