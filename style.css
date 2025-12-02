@@ -1,0 +1,142 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  margin: 0;
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.calendar-container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.month-header {
+  text-align: center;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.day-labels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.day {
+  background: #eee;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.2s;
+}
+
+.day:hover {
+  transform: scale(1.03);
+}
+
+.past {
+  background: #e1d0ff;
+  color: #666;
+}
+
+@keyframes flash-today {
+  0% { background: #00e4d1; }
+  50% { background: #f1cd00; }
+  100% { background: #00e4d1; }
+}
+
+.today {
+  background: #00e4d1;
+  color: #fff;
+  font-weight: bold;
+  animation: flash-today 1.2s infinite ease-in-out;
+}
+
+.future {
+  background: #dee4ff;
+}
+
+.month-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.month-controls button {
+  padding: 8px 16px;
+  font-size: 1.2em;
+  cursor: pointer;
+  border: 1px solid #000;
+  border-radius: 6px;
+  background: #f2f2f2;
+}
+
+.month-controls button:hover {
+  background: #ddd;
+}
+
+
+/* Popup styling */
+.iframe-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border: 1px solid #000000;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  z-index: 1000;
+  width: 20%;
+  height: 70%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.iframe-header {
+  background: #000000;
+  color: #ffffff;
+  padding: 2rem;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.iframe-header button {
+  background: crimson;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.iframe-header button:hover {
+  background: darkred;
+}
+
+iframe {
+  width: 100%;
+  height: calc(100% - 40px);
+  border: none;
+}
+
+.has-image {
+  background: #ef74ff !important;
+  color: white;
+  font-weight: bold;
+}
