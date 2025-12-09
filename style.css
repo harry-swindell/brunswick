@@ -166,3 +166,13 @@ iframe {
   font-weight: bold;
 }
 
+/* Tablet & Desktop Styles */
+@media (max-width: 768px) { /* For screens 768px and wider */
+  .iframe-popup img {
+    width: 250%;
+    height: auto;
+    max-width: none;
+    display: block;
+    margin-bottom: 10rem;
+  }
+}
