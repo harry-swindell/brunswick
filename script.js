@@ -2,6 +2,10 @@ const calendar = document.getElementById('calendar');
 const header = document.getElementById('month-header');
 const dayLabels = document.getElementById('day-labels');
 
+// Global cache for image existence
+// path → true (exists) / false (doesn't exist)
+const imageCache = {};
+
 // Track current view year & month
 let currentDate = new Date();
 let viewYear = currentDate.getFullYear();
@@ -54,19 +58,39 @@ function renderCalendar(year, month) {
       day.classList.add('future');
     }
 
-    // ---------- HIGHLIGHT ONLY IF LETTER-SUFFIX IMAGES EXIST ----------
+    // ---------- HIGHLIGHT ONLY IF LETTER-SUFFIX IMAGES EXIST (CACHED) ----------
     const letters = "abcdefghijklmnopqrstuvwxyz".split("");
     let marked = false;
 
     letters.forEach(letter => {
+      const path = `assets/${year}/${month + 1}/day${d}${letter}.jpg`;
+
+      // If cached true → mark instantly
+      if (imageCache[path] === true) {
+        if (!marked) {
+          marked = true;
+          day.classList.add("has-image");
+        }
+        return;
+      }
+
+      // If cached false → skip
+      if (imageCache[path] === false) return;
+
+      // Not cached → load once
       const img = new Image();
       img.onload = () => {
+        imageCache[path] = true;
         if (!marked) {
           marked = true;
           day.classList.add("has-image");
         }
       };
-      img.src = `assets/${year}/${month + 1}/day${d}${letter}.jpg`;
+      img.onerror = () => {
+        imageCache[path] = false;
+      };
+
+      img.src = path;
     });
     // -----------------------------------------------------------------
 
@@ -127,17 +151,45 @@ function openIframe(year, month, day) {
     });
   }
 
-  // Always check base image
+  // Base image logic (unchanged, now cached)
   const basePath = `assets/${year}/${month + 1}/day${day}.jpg`;
-  const baseProbe = new Image();
-  baseProbe.onload = () => { images.push(basePath); renderImages(); };
-  baseProbe.src = basePath;
 
-  // Check lettered images (dayXa, dayXb …)
+  if (imageCache[basePath] === true) {
+    images.push(basePath);
+    renderImages();
+  } else if (imageCache[basePath] === undefined) {
+    const baseProbe = new Image();
+    baseProbe.onload = () => {
+      imageCache[basePath] = true;
+      images.push(basePath);
+      renderImages();
+    };
+    baseProbe.onerror = () => {
+      imageCache[basePath] = false;
+    };
+    baseProbe.src = basePath;
+  }
+
+  // Letter-suffix image logic, now fully cached
   letters.forEach(letter => {
     const path = `assets/${year}/${month + 1}/day${day}${letter}.jpg`;
+
+    if (imageCache[path] === true) {
+      images.push(path);
+      renderImages();
+      return;
+    }
+    if (imageCache[path] === false) return;
+
     const probe = new Image();
-    probe.onload = () => { images.push(path); renderImages(); };
+    probe.onload = () => {
+      imageCache[path] = true;
+      images.push(path);
+      renderImages();
+    };
+    probe.onerror = () => {
+      imageCache[path] = false;
+    };
     probe.src = path;
   });
 }

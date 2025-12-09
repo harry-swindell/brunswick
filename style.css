@@ -132,11 +132,11 @@ body {
 
 /* Zoomed images */
 .iframe-popup img {
-  width: 300%;
+  width: 150%;
   height: auto;
   max-width: none;
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: 10rem;
 }
 
 .iframe-header button {
