@@ -39,7 +39,6 @@ body {
 }
 
 .day {
-  background: #eee;
   border-radius: 8px;
   padding: 12px;
   text-align: center;
@@ -47,6 +46,14 @@ body {
   user-select: none;
   transition: 0.2s;
 }
+
+.day.today {
+  background: #00e4d1 !important;
+  color: #fff;
+  font-weight: bold;
+  /*animation: flash-today 1.2s infinite ease-in-out !important;*/
+}
+
 
 .day:hover {
   transform: scale(1.03);
@@ -67,7 +74,7 @@ body {
   background: #00e4d1;
   color: #fff;
   font-weight: bold;
-  animation: flash-today 1.2s infinite ease-in-out;
+  animation: flash-today 1.2s infinite ease-in-out !important;
 }
 
 .future {
@@ -132,11 +139,13 @@ body {
 
 /* Zoomed images */
 .iframe-popup img {
-  width: 150%;
+  width: 40%;
   height: auto;
   max-width: none;
   display: block;
   margin-bottom: 10rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .iframe-header button {
@@ -169,7 +178,7 @@ iframe {
 /* Tablet & Desktop Styles */
 @media (max-width: 768px) { /* For screens 768px and wider */
   .iframe-popup img {
-    width: 250%;
+    width: 100%;
     height: auto;
     max-width: none;
     display: block;

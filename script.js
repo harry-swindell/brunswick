@@ -11,6 +11,23 @@ let currentDate = new Date();
 let viewYear = currentDate.getFullYear();
 let viewMonth = currentDate.getMonth(); // 0 = Jan
 
+function updateDate() {
+  const dateElement = document.getElementById('current-date');
+  const currentDate = new Date();
+
+  // Format the date as desired (e.g., "Day, Month Day, Year")
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = currentDate.toLocaleDateString(undefined, options);
+
+  dateElement.textContent = formattedDate;
+}
+
+// Call the function initially to display the date immediately
+updateDate();
+
+// Update the date every second (or at your desired interval)
+setInterval(updateDate, 1000);
+
 const monthNames = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
@@ -48,6 +65,8 @@ function renderCalendar(year, month) {
     const day = document.createElement('div');
     day.classList.add('day');
     day.textContent = d;
+
+
 
     // Default: past/today/future coloring
     if (isCurrentMonth) {
